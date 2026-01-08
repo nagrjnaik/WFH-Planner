@@ -11,6 +11,11 @@
       padding: 0;
     }
 
+    html {
+      overflow-x: hidden;
+      width: 100%;
+    }
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -19,6 +24,8 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      overflow-x: hidden;
+      width: 100%;
     }
 
     .container {
@@ -70,6 +77,8 @@
 
     .content {
       padding: 30px;
+      max-width: 100%;
+      overflow-x: hidden;
     }
 
     .input-section {
@@ -172,6 +181,7 @@
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       gap: 8px;
+      width: 100%;
     }
 
     .calendar-day {
@@ -184,9 +194,10 @@
       border: 2px solid #e5e7eb;
       background: white;
       font-size: 1rem;
-      min-height: 40px;
       user-select: none;
       transition: all 0.2s;
+      width: 100%;
+      max-width: 100%;
     }
 
     .calendar-day.header {
@@ -237,17 +248,16 @@
 
     .legend {
       display: none;
-      justify-content: center;
-      gap: 20px;
-      flex-wrap: wrap;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
       margin-bottom: 20px;
-      padding: 15px;
+      padding: 20px;
       background: #f9fafb;
       border-radius: 12px;
     }
 
     .legend.show {
-      display: flex;
+      display: grid;
     }
 
     .legend-item {
@@ -386,6 +396,14 @@
         padding: 10px;
       }
 
+      .container {
+        border-radius: 16px;
+      }
+
+      .header {
+        padding: 20px 15px;
+      }
+
       .header h1 {
         font-size: 1.5rem;
       }
@@ -399,39 +417,86 @@
         padding: 15px;
       }
 
+      .input-section {
+        margin-bottom: 20px;
+      }
+
       .calendar {
         gap: 4px;
       }
 
       .calendar-day {
-        font-size: 0.85rem;
-        min-height: 35px;
-        border-radius: 8px;
+        font-size: 0.8rem;
+        border-radius: 6px;
         border-width: 1px;
       }
 
       .calendar-day.header {
-        font-size: 0.75rem;
+        font-size: 0.7rem;
+      }
+
+      .mode-selector {
+        padding: 15px;
+      }
+
+      .mode-selector h3 {
+        font-size: 0.9rem;
+      }
+
+      .radio-group {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+
+      .radio-option label {
+        padding: 10px 15px;
+        font-size: 0.85rem;
       }
 
       .legend {
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        padding: 12px;
+      }
+
+      .legend-item {
+        font-size: 0.85rem;
+      }
+
+      .legend-color {
+        width: 20px;
+        height: 20px;
+      }
+
+      .export-btn {
+        padding: 12px 30px;
+        font-size: 0.95rem;
       }
     }
 
     @media (max-width: 480px) {
+      body {
+        padding: 8px;
+      }
+
+      .container {
+        border-radius: 12px;
+      }
+
+      .header {
+        padding: 15px 10px;
+      }
+
       .header h1 {
         font-size: 1.3rem;
       }
 
       .header p {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
       }
 
       .content {
-        padding: 12px;
+        padding: 10px;
       }
 
       .calendar {
@@ -439,17 +504,73 @@
       }
 
       .calendar-day {
-        font-size: 0.75rem;
-        min-height: 30px;
-        border-radius: 6px;
+        font-size: 0.7rem;
+        border-radius: 4px;
       }
 
       .calendar-day.header {
-        font-size: 0.7rem;
+        font-size: 0.65rem;
+      }
+
+      .mode-selector {
+        padding: 12px;
+      }
+
+      .mode-selector h3 {
+        font-size: 0.85rem;
+        margin-bottom: 12px;
       }
 
       .radio-group {
         grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .radio-option label {
+        padding: 10px;
+        font-size: 0.8rem;
+      }
+
+      .legend {
+        padding: 10px;
+        gap: 10px;
+      }
+
+      .legend-item {
+        font-size: 0.8rem;
+      }
+
+      .input-group {
+        max-width: 100%;
+      }
+
+      .generate-btn {
+        width: 100%;
+        max-width: 100%;
+      }
+
+      .export-btn {
+        width: 100%;
+        padding: 10px 20px;
+        font-size: 0.9rem;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .calendar {
+        gap: 2px;
+      }
+
+      .calendar-day {
+        font-size: 0.65rem;
+      }
+
+      .calendar-day.header {
+        font-size: 0.6rem;
+      }
+
+      .content {
+        padding: 8px;
       }
     }
   </style>
@@ -547,7 +668,7 @@
             💼 <a href="https://www.linkedin.com/in/nagraj-naik-314710154" target="_blank">LinkedIn</a>
           </p>
           <p style="margin-top: 15px; font-size: 0.9rem; font-style: italic; color: #6b7280;">
-            This entire project is vibe coded by ChatGPT and Claude Sonnet 4.5 ✨
+            This entire project is vibe coded using ChatGPT and Claude Sonnet 4.5 ✨
           </p>
         </div>
       </div>
@@ -641,7 +762,7 @@
 
     async function downloadCalendar() {
       const temp = document.createElement('div');
-      temp.style.cssText = 'position: fixed; left: -9999px; background: white; padding: 30px; border-radius: 20px; width: 800px;';
+      temp.style.cssText = 'position: fixed; left: -9999px; background: white; padding: 30px; border-radius: 20px; max-width: 800px; width: 100%;';
       
       const title = document.createElement('h2');
       title.textContent = `WFH Planner - ${getMonthName(currentMonth)} ${currentYear}`;
@@ -649,6 +770,7 @@
       temp.appendChild(title);
       
       const cal = document.getElementById('calendar').cloneNode(true);
+      cal.style.width = '100%';
       temp.appendChild(cal);
       
       const leg = document.getElementById('legend').cloneNode(true);
@@ -660,7 +782,8 @@
       
       const canvas = await html2canvas(temp, {
         scale: 2,
-        backgroundColor: '#ffffff'
+        backgroundColor: '#ffffff',
+        windowWidth: 800
       });
       
       document.body.removeChild(temp);
