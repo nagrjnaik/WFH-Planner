@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WFH Planner</title>
   <style>
     * {
@@ -12,7 +12,7 @@
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       min-height: 100vh;
       padding: 20px;
@@ -24,16 +24,13 @@
     .container {
       width: 100%;
       max-width: 900px;
-      background: #ffffff;
+      background: white;
       border-radius: 24px;
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
       overflow: hidden;
     }
 
-    .content {
-      padding: 30px;
-      overflow-x: hidden;
-    }
+    .header {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       padding: 30px 20px;
       text-align: center;
@@ -69,7 +66,6 @@
 
     .about-btn:hover {
       background: rgba(255, 255, 255, 0.3);
-      transform: translateY(-2px);
     }
 
     .content {
@@ -77,52 +73,44 @@
     }
 
     .input-section {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
       margin-bottom: 30px;
     }
 
     .input-group {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+      width: 100%;
+      max-width: 300px;
     }
 
     .input-group label {
+      display: block;
       font-size: 0.9rem;
       font-weight: 600;
       color: #4b5563;
+      margin-bottom: 8px;
     }
 
-    .input-group input,
-    .input-group select {
+    .input-group input {
+      width: 100%;
       padding: 12px;
       border: 2px solid #e5e7eb;
       border-radius: 12px;
       font-size: 1rem;
-      transition: all 0.3s;
-    }
-
-    .input-group input:focus,
-    .input-group select:focus {
-      outline: none;
-      border-color: #667eea;
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
     }
 
     .generate-btn {
-      width: 100%;
-      padding: 14px;
+      padding: 12px 40px;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
       border: none;
       border-radius: 12px;
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s;
-      margin-top: 10px;
     }
 
     .generate-btn:hover {
@@ -138,7 +126,7 @@
       display: none;
     }
 
-    .mode-selector.active {
+    .mode-selector.show {
       display: block;
     }
 
@@ -149,14 +137,9 @@
     }
 
     .radio-group {
-      display: flex;
-      gap: 15px;
-      flex-wrap: wrap;
-    }
-
-    .radio-option {
-      flex: 1;
-      min-width: 150px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
     }
 
     .radio-option input[type="radio"] {
@@ -181,103 +164,79 @@
       color: white;
     }
 
-    .radio-option label:hover {
-      border-color: #667eea;
+    .calendar-container {
+      margin-bottom: 25px;
     }
 
-    .stats {
-      display: flex;
-      justify-content: space-around;
-      background: #f9fafb;
-      padding: 20px;
-      border-radius: 16px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-      gap: 15px;
-    }
-
-    .stat-item {
-      text-align: center;
-      flex: 1;
-      min-width: 100px;
-    }
-
-    .stat-item label {
-      display: block;
-      font-size: 0.85rem;
-      color: #6b7280;
-      margin-bottom: 5px;
-      font-weight: 600;
-    }
-
-    .stat-item .value {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: #1f2937;
-    }
-
-    #calendar {
+    .calendar {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       gap: 8px;
-      margin-bottom: 25px;
-      width: 100%;
     }
 
-    .day {
+    .calendar-day {
       aspect-ratio: 1;
       display: flex;
       align-items: center;
       justify-content: center;
       border-radius: 12px;
       font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s;
       border: 2px solid #e5e7eb;
       background: white;
-      position: relative;
       font-size: 1rem;
       min-height: 40px;
+      user-select: none;
+      transition: all 0.2s;
     }
 
-    .day:not(.header):hover {
+    .calendar-day.header {
+      background: transparent;
+      border: none;
+      color: #6b7280;
+      font-size: 0.85rem;
+      cursor: default;
+    }
+
+    .calendar-day.clickable {
+      cursor: pointer;
+    }
+
+    .calendar-day.clickable:hover {
       transform: scale(1.05);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
-    .day.header {
-      background: transparent;
-      border: none;
-      cursor: default;
-      color: #6b7280;
-      font-size: 0.85rem;
-    }
-
-    .day.weekend {
+    .calendar-day.weekend {
       color: #dc2626;
       background: #fef2f2;
     }
 
-    .day.wfh {
+    .calendar-day.wfh {
       background: linear-gradient(135deg, #10b981, #059669);
       color: white;
       border-color: #10b981;
     }
 
-    .day.holiday {
+    .calendar-day.wfo {
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      color: white;
+      border-color: #fbbf24;
+    }
+
+    .calendar-day.holiday {
       background: linear-gradient(135deg, #ef4444, #dc2626);
       color: white;
       border-color: #ef4444;
     }
 
-    .day.weekend-support {
+    .calendar-day.weekend-support {
       background: linear-gradient(135deg, #3b82f6, #2563eb);
       color: white;
       border-color: #3b82f6;
     }
 
     .legend {
-      display: flex;
+      display: none;
       justify-content: center;
       gap: 20px;
       flex-wrap: wrap;
@@ -285,6 +244,10 @@
       padding: 15px;
       background: #f9fafb;
       border-radius: 12px;
+    }
+
+    .legend.show {
+      display: flex;
     }
 
     .legend-item {
@@ -306,6 +269,10 @@
       background: linear-gradient(135deg, #10b981, #059669);
     }
 
+    .legend-color.wfo {
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    }
+
     .legend-color.holiday {
       background: linear-gradient(135deg, #ef4444, #dc2626);
     }
@@ -315,10 +282,12 @@
     }
 
     .export-section {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
+      display: none;
       justify-content: center;
+    }
+
+    .export-section.show {
+      display: flex;
     }
 
     .export-btn {
@@ -386,11 +355,6 @@
       border-radius: 50%;
       cursor: pointer;
       font-size: 1.2rem;
-      transition: all 0.3s;
-    }
-
-    .close-btn:hover {
-      background: #e5e7eb;
     }
 
     .modal-body {
@@ -408,10 +372,6 @@
       color: #667eea;
       text-decoration: none;
       font-weight: 600;
-    }
-
-    .modal-body a:hover {
-      text-decoration: underline;
     }
 
     .credit-section {
@@ -433,77 +393,35 @@
       .about-btn {
         position: static;
         margin-top: 15px;
-        display: inline-block;
       }
 
       .content {
         padding: 15px;
       }
 
-      .input-section {
-        grid-template-columns: 1fr;
-        gap: 15px;
-      }
-
-      .radio-group {
-        flex-direction: column;
-      }
-
-      .radio-option {
-        min-width: 100%;
-      }
-
-      .stats {
-        flex-direction: column;
-        gap: 10px;
-        padding: 15px;
-      }
-
-      #calendar {
+      .calendar {
         gap: 4px;
       }
 
-      .day {
+      .calendar-day {
         font-size: 0.85rem;
         min-height: 35px;
         border-radius: 8px;
         border-width: 1px;
       }
 
-      .day.header {
+      .calendar-day.header {
         font-size: 0.75rem;
-      }
-
-      .stat-item .value {
-        font-size: 1.5rem;
       }
 
       .legend {
         flex-direction: column;
         align-items: center;
         gap: 10px;
-        padding: 12px;
-      }
-
-      .legend-item {
-        font-size: 0.85rem;
-      }
-
-      .export-btn {
-        padding: 12px 30px;
-        font-size: 0.95rem;
       }
     }
 
     @media (max-width: 480px) {
-      .container {
-        border-radius: 16px;
-      }
-
-      .header {
-        padding: 20px 15px;
-      }
-
       .header h1 {
         font-size: 1.3rem;
       }
@@ -516,51 +434,22 @@
         padding: 12px;
       }
 
-      #calendar {
+      .calendar {
         gap: 3px;
       }
 
-      .day {
+      .calendar-day {
         font-size: 0.75rem;
         min-height: 30px;
         border-radius: 6px;
       }
 
-      .day.header {
+      .calendar-day.header {
         font-size: 0.7rem;
       }
 
-      .mode-selector {
-        padding: 15px;
-      }
-
-      .mode-selector h3 {
-        font-size: 0.9rem;
-      }
-
-      .stats {
-        padding: 12px;
-      }
-
-      .stat-item label {
-        font-size: 0.75rem;
-      }
-
-      .stat-item .value {
-        font-size: 1.3rem;
-      }
-
-      .legend {
-        padding: 10px;
-      }
-
-      .legend-item {
-        font-size: 0.8rem;
-      }
-
-      .legend-color {
-        width: 20px;
-        height: 20px;
+      .radio-group {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -569,7 +458,7 @@
   <div class="container">
     <div class="header">
       <h1>🏡 WFH Planner</h1>
-      <p>Plan your work-from-home, holidays, and weekend support</p>
+      <p>Plan your WFH, WFO, holidays, and weekend support</p>
       <button class="about-btn" onclick="openAbout()">ℹ️ About</button>
     </div>
 
@@ -577,65 +466,45 @@
       <div class="input-section">
         <div class="input-group">
           <label>📅 Select Month</label>
-          <input type="month" id="monthPicker" />
+          <input type="month" id="monthPicker">
         </div>
-        <div class="input-group">
-          <label>🏠 WFH Days</label>
-          <input type="number" id="wfhInput" min="0" value="0" />
-        </div>
-        <div class="input-group">
-          <label>🌴 Holiday Days</label>
-          <input type="number" id="holidayInput" min="0" value="0" />
-        </div>
-        <div class="input-group">
-          <label>💼 Weekend Support</label>
-          <input type="number" id="weekendInput" min="0" value="0" />
-        </div>
+        <button class="generate-btn" onclick="generateCalendar()">✨ Generate Calendar</button>
       </div>
-
-      <button class="generate-btn" onclick="generateCalendar()">
-        ✨ Generate Calendar
-      </button>
 
       <div class="mode-selector" id="modeSelector">
         <h3>🎨 Select Mode to Mark Days</h3>
         <div class="radio-group">
           <div class="radio-option">
-            <input type="radio" id="wfhMode" name="mode" value="wfh" checked />
+            <input type="radio" id="wfhMode" name="mode" value="wfh" checked>
             <label for="wfhMode">🏠 WFH</label>
           </div>
           <div class="radio-option">
-            <input type="radio" id="holidayMode" name="mode" value="holiday" />
+            <input type="radio" id="wfoMode" name="mode" value="wfo">
+            <label for="wfoMode">🏢 WFO</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" id="holidayMode" name="mode" value="holiday">
             <label for="holidayMode">🌴 Holiday</label>
           </div>
           <div class="radio-option">
-            <input type="radio" id="weekendMode" name="mode" value="weekend" />
+            <input type="radio" id="weekendMode" name="mode" value="weekend">
             <label for="weekendMode">💼 Weekend</label>
           </div>
         </div>
       </div>
 
-      <div class="stats" id="stats" style="display: none;">
-        <div class="stat-item">
-          <label>WFH Remaining</label>
-          <div class="value" id="wfhRemaining">0</div>
-        </div>
-        <div class="stat-item">
-          <label>Holiday Remaining</label>
-          <div class="value" id="holidayRemaining">0</div>
-        </div>
-        <div class="stat-item">
-          <label>Weekend Remaining</label>
-          <div class="value" id="weekendRemaining">0</div>
-        </div>
+      <div class="calendar-container">
+        <div class="calendar" id="calendar"></div>
       </div>
 
-      <div id="calendar"></div>
-
-      <div class="legend" id="legend" style="display: none;">
+      <div class="legend" id="legend">
         <div class="legend-item">
           <div class="legend-color wfh"></div>
           <span>🏠 Work From Home</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color wfo"></div>
+          <span>🏢 Work From Office</span>
         </div>
         <div class="legend-item">
           <div class="legend-color holiday"></div>
@@ -647,8 +516,8 @@
         </div>
       </div>
 
-      <div class="export-section" id="exportSection" style="display: none;">
-        <button class="export-btn" onclick="exportPNG()">⬇️ Download</button>
+      <div class="export-section" id="exportSection">
+        <button class="export-btn" onclick="downloadCalendar()">⬇️ Download</button>
       </div>
     </div>
   </div>
@@ -660,14 +529,14 @@
         <button class="close-btn" onclick="closeAbout()">×</button>
       </div>
       <div class="modal-body">
-        <p>A modern, intuitive tool to plan your work-from-home days, holidays, and weekend support schedules.</p>
+        <p>A modern, intuitive tool to plan your work-from-home, work-from-office, holidays, and weekend support schedules.</p>
         
         <h3>✨ Features</h3>
         <ul>
           <li>Interactive calendar with visual planning</li>
           <li>Download calendar as PNG image with legend</li>
           <li>Mobile-friendly responsive design</li>
-          <li>Real-time balance tracking</li>
+          <li>4 marking modes: WFH, WFO, Holiday, Weekend Support</li>
         </ul>
 
         <div class="credit-section">
@@ -687,156 +556,114 @@
 
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script>
-    let remainingWFH = 0;
-    let remainingHoliday = 0;
-    let remainingWeekend = 0;
     let currentYear, currentMonth;
-    let markedDays = [];
+    let markedDays = {};
 
     function generateCalendar() {
       const monthValue = document.getElementById('monthPicker').value;
       if (!monthValue) {
-        alert('Please select a month!');
+        alert('Please select a month first!');
         return;
       }
-
-      remainingWFH = parseInt(document.getElementById('wfhInput').value) || 0;
-      remainingHoliday = parseInt(document.getElementById('holidayInput').value) || 0;
-      remainingWeekend = parseInt(document.getElementById('weekendInput').value) || 0;
 
       const [year, month] = monthValue.split('-');
       currentYear = parseInt(year);
       currentMonth = parseInt(month);
+      markedDays = {};
 
-      markedDays = [];
-      renderCalendar();
-      updateStats();
+      buildCalendar();
 
-      document.getElementById('modeSelector').classList.add('active');
-      document.getElementById('stats').style.display = 'flex';
-      document.getElementById('legend').style.display = 'flex';
-      document.getElementById('exportSection').style.display = 'flex';
+      document.getElementById('modeSelector').classList.add('show');
+      document.getElementById('legend').classList.add('show');
+      document.getElementById('exportSection').classList.add('show');
     }
 
-    function renderCalendar() {
+    function buildCalendar() {
       const calendar = document.getElementById('calendar');
       calendar.innerHTML = '';
 
-      const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-      daysOfWeek.forEach(day => {
+      // Add headers
+      const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      days.forEach(day => {
         const header = document.createElement('div');
-        header.className = 'day header';
+        header.className = 'calendar-day header';
         header.textContent = day;
         calendar.appendChild(header);
       });
 
+      // Calculate first day and total days
       const firstDay = new Date(currentYear, currentMonth - 1, 1);
       const lastDay = new Date(currentYear, currentMonth, 0);
-      const daysInMonth = lastDay.getDate();
-      const startingDayOfWeek = firstDay.getDay();
+      const totalDays = lastDay.getDate();
+      const startDay = firstDay.getDay();
 
-      for (let i = 0; i < startingDayOfWeek; i++) {
+      // Add empty cells
+      for (let i = 0; i < startDay; i++) {
         calendar.appendChild(document.createElement('div'));
       }
 
-      for (let day = 1; day <= daysInMonth; day++) {
-        const dayEl = document.createElement('div');
+      // Add day cells
+      for (let day = 1; day <= totalDays; day++) {
         const date = new Date(currentYear, currentMonth - 1, day);
         const dayOfWeek = date.getDay();
         
-        dayEl.className = 'day';
+        const cell = document.createElement('div');
+        cell.className = 'calendar-day clickable';
+        cell.textContent = day;
+        cell.dataset.day = day;
+        
         if (dayOfWeek === 0 || dayOfWeek === 6) {
-          dayEl.classList.add('weekend');
+          cell.classList.add('weekend');
         }
         
-        dayEl.textContent = day;
-        dayEl.dataset.day = day;
-        dayEl.onclick = () => toggleDay(day, dayEl);
+        cell.addEventListener('click', function() {
+          handleDayClick(day, cell);
+        });
         
-        calendar.appendChild(dayEl);
+        calendar.appendChild(cell);
       }
     }
 
-    function toggleDay(day, element) {
+    function handleDayClick(day, element) {
       const mode = document.querySelector('input[name="mode"]:checked').value;
-      const existingMark = markedDays.find(m => m.day === day);
-
-      if (existingMark) {
-        if (existingMark.type === mode) {
-          markedDays = markedDays.filter(m => m.day !== day);
-          element.classList.remove('wfh', 'holiday', 'weekend-support');
-          
-          if (mode === 'wfh') remainingWFH++;
-          if (mode === 'holiday') remainingHoliday++;
-          if (mode === 'weekend') remainingWeekend++;
-        } else {
-          if (mode === 'wfh' && remainingWFH <= 0) return;
-          if (mode === 'holiday' && remainingHoliday <= 0) return;
-          if (mode === 'weekend' && remainingWeekend <= 0) return;
-
-          if (existingMark.type === 'wfh') remainingWFH++;
-          if (existingMark.type === 'holiday') remainingHoliday++;
-          if (existingMark.type === 'weekend') remainingWeekend++;
-
-          existingMark.type = mode;
-          element.classList.remove('wfh', 'holiday', 'weekend-support');
-          element.classList.add(mode === 'weekend' ? 'weekend-support' : mode);
-
-          if (mode === 'wfh') remainingWFH--;
-          if (mode === 'holiday') remainingHoliday--;
-          if (mode === 'weekend') remainingWeekend--;
-        }
-      } else {
-        if (mode === 'wfh' && remainingWFH <= 0) return;
-        if (mode === 'holiday' && remainingHoliday <= 0) return;
-        if (mode === 'weekend' && remainingWeekend <= 0) return;
-
-        markedDays.push({ day, type: mode });
-        element.classList.add(mode === 'weekend' ? 'weekend-support' : mode);
-
-        if (mode === 'wfh') remainingWFH--;
-        if (mode === 'holiday') remainingHoliday--;
-        if (mode === 'weekend') remainingWeekend--;
-      }
-
-      updateStats();
-    }
-
-    function updateStats() {
-      document.getElementById('wfhRemaining').textContent = remainingWFH;
-      document.getElementById('holidayRemaining').textContent = remainingHoliday;
-      document.getElementById('weekendRemaining').textContent = remainingWeekend;
-    }
-
-    async function exportPNG() {
-      // Create a temporary container for the calendar and legend
-      const tempContainer = document.createElement('div');
-      tempContainer.style.cssText = 'position: fixed; left: -9999px; background: white; padding: 30px; border-radius: 20px;';
       
-      // Add title
+      if (markedDays[day] === mode) {
+        // Same mode - remove
+        delete markedDays[day];
+        element.classList.remove('wfh', 'wfo', 'holiday', 'weekend-support');
+      } else {
+        // Different mode or new - add/change
+        markedDays[day] = mode;
+        element.classList.remove('wfh', 'wfo', 'holiday', 'weekend-support');
+        element.classList.add(mode === 'weekend' ? 'weekend-support' : mode);
+      }
+    }
+
+    async function downloadCalendar() {
+      const temp = document.createElement('div');
+      temp.style.cssText = 'position: fixed; left: -9999px; background: white; padding: 30px; border-radius: 20px; width: 800px;';
+      
       const title = document.createElement('h2');
       title.textContent = `WFH Planner - ${getMonthName(currentMonth)} ${currentYear}`;
       title.style.cssText = 'text-align: center; margin-bottom: 20px; color: #1f2937; font-size: 1.8rem;';
-      tempContainer.appendChild(title);
+      temp.appendChild(title);
       
-      // Clone calendar
-      const calendar = document.getElementById('calendar').cloneNode(true);
-      tempContainer.appendChild(calendar);
+      const cal = document.getElementById('calendar').cloneNode(true);
+      temp.appendChild(cal);
       
-      // Clone legend
-      const legend = document.getElementById('legend').cloneNode(true);
-      legend.style.display = 'flex';
-      legend.style.marginTop = '20px';
-      tempContainer.appendChild(legend);
+      const leg = document.getElementById('legend').cloneNode(true);
+      leg.style.display = 'flex';
+      leg.style.marginTop = '20px';
+      temp.appendChild(leg);
       
-      document.body.appendChild(tempContainer);
+      document.body.appendChild(temp);
       
-      const canvas = await html2canvas(tempContainer, {
+      const canvas = await html2canvas(temp, {
         scale: 2,
         backgroundColor: '#ffffff'
       });
       
-      document.body.removeChild(tempContainer);
+      document.body.removeChild(temp);
       
       const link = document.createElement('a');
       link.download = `wfh-planner-${currentYear}-${currentMonth}.png`;
@@ -861,10 +688,6 @@
     document.getElementById('aboutModal').onclick = function(e) {
       if (e.target === this) closeAbout();
     };
-
-    const today = new Date();
-    const currentMonthStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
-    document.getElementById('monthPicker').value = currentMonthStr;
   </script>
 </body>
 </html>
